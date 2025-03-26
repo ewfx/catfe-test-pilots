@@ -1,0 +1,392 @@
+{
+    "apis": [
+        {
+            "endpoint": "/finance/v1/bank/v4/bharat/create-account",
+            "method": "POST",
+            "parameters": [
+                {
+                    "name": "userRequest",
+                    "type": "UserRequest",
+                    "description": "Details for creating a new account."
+                }
+            ],
+            "responses": {
+                "201": {
+                    "type": "UserResponse",
+                    "description": "Account created successfully."
+                }
+            },
+            "dependencies": [
+                "AccountDetailsRepositories",
+                "AccountDetailsGenarators",
+                "MapperToResponse",
+                "NotificationsUtility"
+            ],
+            "description": "Creates a new bank account.",
+            "businessRules": "Email and phone number must be unique.  Account number and IFSC code are generated automatically."
+        },
+        {
+            "endpoint": "/finance/v1/bank/v4/bharat/update-account-details",
+            "method": "PUT",
+            "parameters": [
+                {
+                    "name": "accountDetailsRequest",
+                    "type": "AccountUpdatingDetailsRequest",
+                    "description": "Details to update an existing account."
+                }
+            ],
+            "responses": {
+                "201": {
+                    "type": "AccountUpdateDetailsResponse",
+                    "description": "Account updated successfully."
+                }
+            },
+            "dependencies": [
+                "AccountDetailsRepositories",
+                "MapperToUpdateResponse",
+                "NotificationsUtility"
+            ],
+            "description": "Updates details of an existing bank account.",
+            "businessRules": "Account must exist.  Updates specified fields."
+        },
+        {
+            "endpoint": "/finance/v1/bank/v4/bharat/delete-account",
+            "method": "DELETE",
+            "parameters": [
+                {
+                    "name": "accountDetailsRequest",
+                    "type": "AccountDeleteAccountDetailsRequest",
+                    "description": "Details to delete an account."
+                }
+            ],
+            "responses": {
+                "202": {
+                    "type": "AccountDeletedSuccessResponse",
+                    "description": "Account deleted successfully."
+                }
+            },
+            "dependencies": [
+                "AccountDetailsRepositories",
+                "NotificationsUtility"
+            ],
+            "description": "Deletes a bank account.",
+            "businessRules": "Account must exist and password must match."
+        },
+        {
+            "endpoint": "/finance/v1/bank/v4/bharat/get-account-details/{accountNumber}/{IFSCCode}/{password}",
+            "method": "GET",
+            "parameters": [
+                {
+                    "name": "accountNumber",
+                    "type": "String",
+                    "description": "Account number."
+                },
+                {
+                    "name": "IFSCCode",
+                    "type": "String",
+                    "description": "IFSC code."
+                },
+                {
+                    "name": "password",
+                    "type": "String",
+                    "description": "Account password."
+                }
+            ],
+            "responses": {
+                "202": {
+                    "type": "AccountDetailsResponse",
+                    "description": "Account details."
+                }
+            },
+            "dependencies": [
+                "AccountDetailsRepositories"
+            ],
+            "description": "Retrieves details of a bank account.",
+            "businessRules": "Account must exist and password must match."
+        },
+        {
+            "endpoint": "/finance/v1/bank/v4/bharat/balance-enquiry",
+            "method": "GET",
+            "parameters": [
+                {
+                    "name": "balanceEnquireyRequest",
+                    "type": "BalanceEnquireyRequest",
+                    "description": "Request for balance enquiry."
+                }
+            ],
+            "responses": {
+                "202": {
+                    "type": "BalanceEnquiryResponse",
+                    "description": "Balance enquiry response."
+                }
+            },
+            "dependencies": [
+                "AccountDetailsRepositories",
+                "NotificationsUtility"
+            ],
+            "description": "Performs a balance enquiry.",
+            "businessRules": "Account must exist and password must match."
+        },
+        {
+            "endpoint": "/finance/v1/bank/v4/bharat/credit-money",
+            "method": "GET",
+            "parameters": [
+                {
+                    "name": "creditCredential",
+                    "type": "CreditCredential",
+                    "description": "Details for crediting money."
+                }
+            ],
+            "responses": {
+                "202": {
+                    "type": "CreditResponse",
+                    "description": "Credit response."
+                }
+            },
+            "dependencies": [
+                "AccountDetailsRepositories",
+                "TransactionService",
+                "AccountlLimitReached",
+                "NotificationsUtility"
+            ],
+            "description": "Credits money to an account.",
+            "businessRules": "Account must exist, password must match, and daily transaction limit must not be exceeded."
+        },
+        {
+            "endpoint": "/finance/v1/bank/v4/bharat/debit-money",
+            "method": "GET",
+            "parameters": [
+                {
+                    "name": "debitCredential",
+                    "type": "DebitCredential",
+                    "description": "Details for debiting money."
+                }
+            ],
+            "responses": {
+                "202": {
+                    "type": "DebitedResponse",
+                    "description": "Debit response."
+                }
+            },
+            "dependencies": [
+                "AccountDetailsRepositories",
+                "TransactionService",
+                "AccountlLimitReached",
+                "NotificationsUtility"
+            ],
+            "description": "Debits money from an account.",
+            "businessRules": "Account must exist, password must match, sufficient balance must be available, and daily transaction limit must not be exceeded. High value transactions trigger additional notifications."
+        },
+        {
+            "endpoint": "/finance/v1/bank/v4/bharat/pay-money-from-upi",
+            "method": "POST",
+            "parameters": [
+                {
+                    "name": "addMoneyFromAccountToUPIRequest",
+                    "type": "AddMoneyFromAccountToUPIRequest",
+                    "description": "Details for UPI payment."
+                }
+            ],
+            "responses": {
+                "202": {
+                    "type": "AddMoneyFromAccountToUPIResponse",
+                    "description": "UPI payment response."
+                }
+            },
+            "dependencies": [
+                "AccountDetailsRepositories",
+                "UPIDetailsRepositories",
+                "AccountlLimitReached"
+            ],
+            "description": "Initiates a payment from a bank account to a UPI ID.",
+            "businessRules": "Account and UPI ID must exist, sufficient balance must be available, and daily transaction limit must not be exceeded."
+        },
+        {
+            "endpoint": "/finance/v1/bank/v4/bharat/add-money-to-upi-from-bank",
+            "method": "POST",
+            "parameters": [
+                {
+                    "name": "addMoneyToUPIFromAccountRequest",
+                    "type": "AddMoneyToUPIFromAccountRequest",
+                    "description": "Details for adding money to UPI from account."
+                }
+            ],
+            "responses": {
+                "202": {
+                    "type": "AddMoneyToUPIFromAccountResponse",
+                    "description": "Add money response."
+                }
+            },
+            "dependencies": [
+                "AccountDetailsRepositories",
+                "UPIDetailsRepositories",
+                "AccountlLimitReached"
+            ],
+            "description": "Adds money to a UPI ID from a bank account.",
+            "businessRules": "Account and UPI ID must exist, and daily transaction limit must not be exceeded."
+        },
+        {
+            "endpoint": "/finance/v1/bank/v4/bharat/update/money",
+            "method": "PUT",
+            "parameters": [
+                {
+                    "name": "updateAmountManually",
+                    "type": "UpdateAmountManually",
+                    "description": "Details for manual account balance update."
+                }
+            ],
+            "responses": {
+                "202": {
+                    "type": "UpdateAmountResponse",
+                    "description": "Update amount response."
+                }
+            },
+            "dependencies": [
+                "AccountDetailsRepositories"
+            ],
+            "description": "Manually updates the account balance.",
+            "businessRules": "Account must exist."
+        },
+        {
+            "endpoint": "/finance/v1/banking/net-bankingId-create",
+            "method": "POST",
+            "parameters": [
+                {
+                    "name": "netBankingRequest",
+                    "type": "NetBankingRequest",
+                    "description": "Request for NetBanking ID creation."
+                }
+            ],
+            "responses": {
+                "202": {
+                    "type": "NetBankingResponse",
+                    "description": "NetBanking ID creation response."
+                }
+            },
+            "dependencies": [
+                "AccountDetailsRepositories",
+                "NetBankingRepositories",
+                "InternetBankingIdGenerator",
+                "NotificationsUtility"
+            ],
+            "description": "Creates a NetBanking ID.",
+            "businessRules": "Account must exist and NetBanking ID must be unique."
+        },
+        {
+            "endpoint": "/finance/v1/banking/get-internetBanking-details",
+            "method": "GET",
+            "parameters": [
+                {
+                    "name": "netBankingRequest",
+                    "type": "GetNetBankingRequest",
+                    "description": "Request for NetBanking details."
+                }
+            ],
+            "responses": {
+                "202": {
+                    "type": "NetBankingResponse",
+                    "description": "NetBanking details response."
+                }
+            },
+            "dependencies": [
+                "NetBankingRepositories"
+            ],
+            "description": "Retrieves NetBanking details.",
+            "businessRules": "Account must exist."
+        },
+        {
+            "endpoint": "/transaction/v1/fetch/transaction-enquiry/{accountNumber}",
+            "method": "GET",
+            "parameters": [
+                {
+                    "name": "accountNumber",
+                    "type": "String",
+                    "description": "Account number."
+                }
+            ],
+            "responses": {
+                "202": {
+                    "type": "List<TransactionResponse>",
+                    "description": "List of transactions."
+                }
+            },
+            "dependencies": [
+                "TransactionHistoryRepository",
+                "TransactionToTransactionResponse"
+            ],
+            "description": "Retrieves transaction history for an account.",
+            "businessRules": "Account must exist."
+        },
+        {
+            "endpoint": "/transfer/v1/banking/v6/process",
+            "method": "POST",
+            "parameters": [
+                {
+                    "name": "transferMoneyRequest",
+                    "type": "TransferMoneyRequest",
+                    "description": "Request for money transfer."
+                }
+            ],
+            "responses": {
+                "202": {
+                    "type": "TransferMoneyResponse",
+                    "description": "Money transfer response."
+                }
+            },
+            "dependencies": [
+                "AccountDetailsRepositories",
+                "NotificationsUtility"
+            ],
+            "description": "Transfers money between accounts.",
+            "businessRules": "Both sender and recipient accounts must exist. Sufficient balance must be available in sender's account. High-value transfers trigger notifications."
+        },
+        {
+            "endpoint": "/finance/upi/v1/upi-create",
+            "method": "POST",
+            "parameters": [
+                {
+                    "name": "upiRequest",
+                    "type": "UPIRequest",
+                    "description": "Request for UPI creation."
+                }
+            ],
+            "responses": {
+                "202": {
+                    "type": "UPIResponse",
+                    "description": "UPI creation response."
+                }
+            },
+            "dependencies": [
+                "AccountDetailsRepositories",
+                "NetBankingRepositories",
+                "UPIDetailsRepositories",
+                "UPIDGenerater",
+                "NotificationsUtility"
+            ],
+            "description": "Creates a UPI ID for an account.",
+            "businessRules": "Account must exist, NetBanking ID must exist, and UPI ID must be unique.  Triggers notifications."
+        },
+        {
+            "endpoint": "/finance/upi/v1/get-upi-details",
+            "method": "GET",
+            "parameters": [
+                {
+                    "name": "upiRequest",
+                    "type": "GetUPIRequest",
+                    "description": "Request for UPI details."
+                }
+            ],
+            "responses": {
+                "202": {
+                    "type": "UPIResponse",
+                    "description": "UPI details response."
+                }
+            },
+            "dependencies": [
+                "UPIDetailsRepositories"
+            ],
+            "description": "Retrieves UPI details for an account.",
+            "businessRules": "Account must exist."
+        }
+    ]
+}
