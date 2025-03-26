@@ -18,7 +18,7 @@
 Modern financial ecosystems are highly dynamic, with frequent code changes impacting business logic and APIs. Traditional automation testing methods struggle to keep up, leading to inefficiencies and increased manual intervention. Our project aims to revolutionize *automation testing* by leveraging *GenAI-powered automation* to create a *context-aware, self-adaptive testing system* that ensures seamless software delivery with minimal human effort.
 
 ## 🎥 Demo 
-📹 [Video Demo](#) (if applicable)  
+📹 [Video Demo](https://coepac-my.sharepoint.com/:v:/g/personal/mulevs20_comp_coeptech_ac_in/EZ6kjRhOSXpNjeEckeY6pQABkaDkSipEDOu0_lbVp0XU4Q?nav=eyJyZWZlcnJhbEluZm8iOnsicmVmZXJyYWxBcHAiOiJPbmVEcml2ZUZvckJ1c2luZXNzIiwicmVmZXJyYWxBcHBQbGF0Zm9ybSI6IldlYiIsInJlZmVycmFsTW9kZSI6InZpZXciLCJyZWZlcnJhbFZpZXciOiJNeUZpbGVzTGlua0NvcHkifX0&e=41wY3U) (if applicable)  
 🖼️ Screenshots:
 
 ![System Architecture](artifacts\arch\arch.jpg)
