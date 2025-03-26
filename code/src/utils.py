@@ -18,10 +18,10 @@ collection = client.get_or_create_collection("api_metadata")
 
 
 # 🔹 Replace these with your details
-GITHUB_TOKEN = ""
-REPO_OWNER = ""
-REPO_NAME = ""
-BRANCH = ""
+GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+REPO_OWNER = os.getenv("REPO_OWNER")
+REPO_NAME = os.getenv("REPO_NAME")
+BRANCH = os.getenv("BRANCH")
 
 # GitHub API Headers
 HEADERS = {"Authorization": f"token {GITHUB_TOKEN}"}

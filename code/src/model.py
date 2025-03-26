@@ -3,17 +3,21 @@ import re
 import google.generativeai as genai
 import os
 from google.generativeai import GenerativeModel
-
+from dotenv import load_dotenv
 from utils import clean_extract_queries, run_queries
 
-GENAI_API_KEY = ""  # 🔹 Replace with your key
+load_dotenv()
+
+GENAI_API_KEY = os.getenv("GEMINI_API_KEY")  # 🔹 Replace with your key
 genai.configure(api_key=GENAI_API_KEY)
 model = GenerativeModel("gemini-1.5-flash")
-URI = ""  # Change if using remote Neo4j
-USERNAME = ""
-PASSWORD = ""
+
+URI = os.getenv("NEO4J_URI")
+USERNAME = os.getenv("NEO4J_USERNAME")
+PASSWORD = os.getenv("NEO4J_PASSWORD")
 
 generated_folder = "tests\generated_tests\Bank-Of-Bharat-BOB"
+
 
 feature_files_content = ""
 for filename in os.listdir(generated_folder):

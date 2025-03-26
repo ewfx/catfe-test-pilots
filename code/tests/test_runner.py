@@ -17,7 +17,7 @@ def build_main_project():
     """Builds the main project using Maven."""
     st.write("🔧 Building the main project...")
 
-    result = subprocess.run(["C:/apache-maven-3.9.9/bin/mvn.cmd", "clean", "install"], cwd="D:\\WFHackathon\\au\\src\\data\\Bank-of-Bharat-BOB-master", text=True, capture_output=True)
+    result = subprocess.run(["mvn", "clean", "install"], cwd="Bank-of-Bharat-BOB-master", text=True, capture_output=True)
 
     if result.returncode == 0:
         st.success("✅ Project built successfully!")
